@@ -90,10 +90,10 @@ Plans:
 
 Plans:
 - [x] 5.1-01: Test framework setup
-- [ ] 5.1-02: Write unit/integration tests (TBD)
+- [x] 5.1-02: Write unit/integration tests
 - [ ] 5.1-03: Write E2E UI tests (TBD)
 
-**Status**: In Progress - Plan 1 complete (Vitest and Playwright configured, test utilities created)
+**Status**: In Progress - Plan 2 complete (37 passing tests for error parsing, retry logic, and hook state)
 
 ### Phase 6: Polish
 **Goal**: Add loading states, responsiveness, and UX refinements
@@ -130,6 +130,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 3. Generation UI | 1/3 | In Progress | 03-01 |
 | 4. Image Display | 0/3 | Not started | - |
 | 5. Error Handling | 3/3 | Complete | 05-01 |
-| 5.1. Testing (INSERTED) | 1/3 | In Progress | 5.1-01 |
+| 5.1. Testing (INSERTED) | 2/3 | In Progress | 5.1-01, 5.1-02 |
 | 6. Polish | 0/3 | Not started | - |
 | 7. Deployment | 0/3 | Not started | - |
