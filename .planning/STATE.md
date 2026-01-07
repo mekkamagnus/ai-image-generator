@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-07)
 
 **Core value:** Simple workflow above all else. The path from "idea" to "generated image" must be fast, intuitive, and require minimal clicks or cognitive load.
-**Current focus:** Phase 4 — Image Display
+**Current focus:** Phase 5.1 — TDD Testing
 
 ## Current Position
 
-Phase: 5 of 7 (Error Handling)
-Plan: 1 of 1 in current phase
-Status: Phase 5 complete
-Last activity: 2026-01-08 — Phase 5 Plan 1 (Error Handling) executed successfully
+Phase: 5.1 of 7 (TDD Testing Including UI Testing with Playwright)
+Plan: 1 of 3 in current phase
+Status: In progress
+Last activity: 2026-01-07 — Phase 5.1 Plan 1 (Test Framework Setup) executed successfully
 
-Progress: ██████░░░ 4/21 plans complete (19%)
+Progress: ███████░░░ 5/24 plans complete (21%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
+- Total plans completed: 5
 - Average duration: ~1 session
-- Total execution time: ~4 hours
+- Total execution time: ~4.5 hours
 
 **By Phase:**
 
@@ -32,11 +32,12 @@ Progress: ██████░░░ 4/21 plans complete (19%)
 | 3. Generation UI | 1 | 1 | 1 session |
 | 4. Image Display | 0 | — | — |
 | 5. Error Handling | 1 | 1 | 12 min |
+| 5.1. Testing | 1 | 1 | 7 min |
 | 6. Polish | 0 | — | — |
 | 7. Deployment | 0 | — | — |
 
 **Recent Trend:**
-- Last 5 plans: 01-01, 02-01, 03-01, 05-01 (complete)
+- Last 5 plans: 01-01, 02-01, 03-01, 05-01, 5.1-01 (complete)
 - Trend: Stable (consistent execution)
 
 ## Accumulated Context
@@ -79,6 +80,13 @@ Recent decisions affecting current work:
 5. **AI-optimized console logging** — Structured objects with ISO timestamps, "action" field, consistent prefixes for agent analysis
 6. **Log prefixes** — [API Error], [Network Error], [Retry], [Image Generation], [UI Error Displayed] for easy filtering
 
+**From Phase 5.1 (TDD Testing):**
+1. **Vitest over Jest** — Vite-native test framework with faster execution, better TypeScript support, and ESM compatibility
+2. **Playwright over Cypress** — Better TypeScript support, faster execution, multi-browser support, and Vite compatibility
+3. **jsdom environment** — Fast DOM testing without browser overhead for unit tests
+4. **Sequential E2E execution** — Single worker prevents hitting DashScope API rate limits during testing
+5. **Test utilities pattern** — DRY principle with centralized mocking, consistent test data, and single source of truth
+
 ### Deferred Issues
 
 None yet.
@@ -96,15 +104,15 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-08
-Stopped at: Phase 5 Plan 1 (Error Handling) complete
+Last session: 2026-01-07
+Stopped at: Phase 5.1 Plan 1 (Test Framework Setup) complete
 Resume file: None
 
 ## Next Actions
 
-Phase 6 Plan 1: Polish (loading states, responsiveness, refinements)
-- Add loading states during generation
-- Implement responsive design for mobile/desktop
-- Visual polish and accessibility improvements
+Phase 5.1 Plan 2: Write unit/integration tests for error parsing, API client, and React hooks
+- Test error parsing logic with various error codes
+- Test API client functions with mocked responses
+- Test React hook state management and polling behavior
 
-Recommended next step: `/gsd:plan-phase 6` or continue manually
+Recommended next step: `/gsd:plan-phase 5.1` or continue manually

@@ -86,13 +86,14 @@ Plans:
 **Depends on**: Phase 5
 **Research**: Likely (test framework selection, testing patterns)
 **Research topics**: Vitest configuration, Playwright setup, testing best practices for React apps, mock patterns for API testing
-**Plans**: 0 plans
+**Plans**: 3 plans
 
 Plans:
-- [ ] TBD (run `/gsd:plan-phase 5.1` to break down)
+- [x] 5.1-01: Test framework setup
+- [ ] 5.1-02: Write unit/integration tests (TBD)
+- [ ] 5.1-03: Write E2E UI tests (TBD)
 
-**Details:**
-[To be added during planning]
+**Status**: In Progress - Plan 1 complete (Vitest and Playwright configured, test utilities created)
 
 ### Phase 6: Polish
 **Goal**: Add loading states, responsiveness, and UX refinements
@@ -129,6 +130,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 3. Generation UI | 1/3 | In Progress | 03-01 |
 | 4. Image Display | 0/3 | Not started | - |
 | 5. Error Handling | 3/3 | Complete | 05-01 |
-| 5.1. Testing (INSERTED) | 0/0 | Not started | - |
+| 5.1. Testing (INSERTED) | 1/3 | In Progress | 5.1-01 |
 | 6. Polish | 0/3 | Not started | - |
 | 7. Deployment | 0/3 | Not started | - |
