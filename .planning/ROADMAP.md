@@ -107,8 +107,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/3 | Not started | - |
-| 2. Qwen Integration | 0/3 | Not started | - |
+| 1. Foundation | 1/3 | In Progress | 01-01 |
+| 2. Qwen Integration | 1/3 | In Progress | 02-01 |
 | 3. Generation UI | 0/3 | Not started | - |
 | 4. Image Display | 0/3 | Not started | - |
 | 5. Error Handling | 0/3 | Not started | - |
