@@ -1,35 +1,48 @@
-import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+// src/App.tsx
+import { useState, useEffect } from 'react';
+import { PromptInput } from './components/ui/PromptInput';
+import { GenerateButton } from './components/ui/GenerateButton';
+import { useImageGeneration } from './hooks/useImageGeneration';
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [darkMode, setDarkMode] = useState(false)
+  const [prompt, setPrompt] = useState('');
+  const [darkMode, setDarkMode] = useState(false);
+  const { generate, status, imageUrl, taskId, error, cleanup } = useImageGeneration();
 
   useEffect(() => {
-    // Check localStorage on mount
-    const isDark = localStorage.getItem('darkMode') === 'true'
-    setDarkMode(isDark)
-  }, [])
+    const isDark = localStorage.getItem('darkMode') === 'true';
+    setDarkMode(isDark);
+  }, []);
 
   const toggleDarkMode = () => {
-    const newMode = !darkMode
-    setDarkMode(newMode)
-    localStorage.setItem('darkMode', String(newMode))
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    localStorage.setItem('darkMode', String(newMode));
 
-    // Toggle class on html element
     if (newMode) {
-      document.documentElement.classList.add('dark')
+      document.documentElement.classList.add('dark');
     } else {
-      document.documentElement.classList.remove('dark')
+      document.documentElement.classList.remove('dark');
     }
-  }
+  };
+
+  const handleGenerate = () => {
+    if (prompt.trim()) {
+      generate(prompt, { size: '1328*1328' });
+    }
+  };
+
+  const handleReset = () => {
+    setPrompt('');
+    cleanup();
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors">
       <div className="container mx-auto px-4 py-8">
-        {/* Dark mode toggle */}
-        <div className="flex justify-end mb-8">
+        {/* Header with dark mode toggle */}
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-2xl font-bold">AI Image Generator</h1>
           <button
             onClick={toggleDarkMode}
             className="px-4 py-2 rounded-lg bg-primary text-white hover:opacity-90 transition-opacity"
@@ -40,46 +53,69 @@ function App() {
         </div>
 
         {/* Main content */}
-        <div className="text-center">
-          <div className="flex justify-center gap-8 mb-8">
-            <a href="https://vite.dev" target="_blank" rel="noopener noreferrer">
-              <img src={viteLogo} className="h-24 hover:drop-shadow-lg transition-shadow" alt="Vite logo" />
-            </a>
-            <a href="https://react.dev" target="_blank" rel="noopener noreferrer">
-              <img src={reactLogo} className="h-24 hover:drop-shadow-lg transition-spin" alt="React logo" />
-            </a>
-          </div>
+        <div className="max-w-2xl mx-auto">
+          {/* Prompt input */}
+          <PromptInput
+            value={prompt}
+            onChange={setPrompt}
+            onSubmit={handleGenerate}
+            disabled={status === 'pending' || status === 'processing'}
+          />
 
-          <h1 className="text-4xl font-bold mb-8 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            Vite + React + Tailwind v4
-          </h1>
+          {/* Generate button */}
+          <GenerateButton
+            status={status}
+            onGenerate={handleGenerate}
+            hasPrompt={prompt.trim().length > 0}
+          />
 
-          <div className="max-w-md mx-auto p-6 rounded-lg shadow-lg bg-card">
-            <button
-              onClick={() => setCount((count) => count + 1)}
-              className="px-6 py-3 rounded-lg bg-primary text-white font-semibold hover:bg-primary/90 transition-colors"
-            >
-              Count is {count}
-            </button>
-            <p className="mt-4 text-sm text-muted-foreground">
-              Edit <code className="px-2 py-1 rounded bg-muted">src/App.tsx</code> and save to test HMR
-            </p>
-          </div>
+          {/* Error display */}
+          {error && (
+            <div className="mt-4 p-4 rounded-lg bg-destructive/10 border border-destructive text-destructive">
+              <p className="font-semibold">Error:</p>
+              <p className="text-sm">{error}</p>
+            </div>
+          )}
 
-          <p className="mt-8 text-sm text-muted-foreground">
-            Click on the Vite and React logos to learn more
-          </p>
+          {/* Status indicator */}
+          {status === 'processing' && (
+            <div className="mt-4 text-center text-muted-foreground">
+              <p>Generating your image... This may take 1-2 minutes.</p>
+              {taskId && <p className="text-xs mt-1">Task ID: {taskId}</p>}
+            </div>
+          )}
 
-          {/* Test dark mode colors */}
-          <div className="mt-8 p-4 rounded-lg bg-secondary/20">
-            <p className="text-primary">Primary color test</p>
-            <p className="text-secondary">Secondary color test</p>
-            <p className="text-foreground">Foreground color test</p>
-          </div>
+          {/* Image result */}
+          {imageUrl && status === 'succeeded' && (
+            <div className="mt-8">
+              <div className="rounded-lg overflow-hidden border border-border">
+                <img
+                  src={imageUrl}
+                  alt="Generated image"
+                  className="w-full h-auto"
+                />
+              </div>
+              <div className="mt-4 flex gap-4 justify-center">
+                <a
+                  href={imageUrl}
+                  download="generated-image.png"
+                  className="px-6 py-2 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
+                >
+                  Download Image
+                </a>
+                <button
+                  onClick={handleReset}
+                  className="px-6 py-2 rounded-lg border border-border hover:bg-muted transition-colors"
+                >
+                  Start Over
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

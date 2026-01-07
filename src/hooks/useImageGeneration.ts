@@ -2,7 +2,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { generateImage, getTaskResult, GenerateImageOptions } from '@/lib/qwen-api';
 
-type GenerationStatus = 'idle' | 'pending' | 'processing' | 'succeeded' | 'failed';
+export type GenerationStatus = 'idle' | 'pending' | 'processing' | 'succeeded' | 'failed';
 
 export function useImageGeneration() {
   const [status, setStatus] = useState<GenerationStatus>('idle');
