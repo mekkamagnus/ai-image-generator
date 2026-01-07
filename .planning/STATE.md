@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-07)
 ## Current Position
 
 Phase: 5.1 of 7 (TDD Testing Including UI Testing with Playwright)
-Plan: 2 of 3 in current phase
-Status: In progress
-Last activity: 2026-01-08 — Phase 5.1 Plan 2 (Unit/Integration Tests) executed successfully
+Plan: 3 of 3 in current phase
+Status: Phase complete
+Last activity: 2026-01-08 — Phase 5.1 Plan 3 (E2E UI Tests) executed successfully
 
-Progress: ████████░░░ 6/24 plans complete (25%)
+Progress: ████████░░░ 7/24 plans complete (29%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
+- Total plans completed: 7
 - Average duration: ~1 session
-- Total execution time: ~5 hours
+- Total execution time: ~5.5 hours
 
 **By Phase:**
 
@@ -32,12 +32,12 @@ Progress: ████████░░░ 6/24 plans complete (25%)
 | 3. Generation UI | 1 | 1 | 1 session |
 | 4. Image Display | 0 | — | — |
 | 5. Error Handling | 1 | 1 | 12 min |
-| 5.1. Testing | 2 | 2 | 21 min |
+| 5.1. Testing | 3 | 3 | 15 min |
 | 6. Polish | 0 | — | — |
 | 7. Deployment | 0 | — | — |
 
 **Recent Trend:**
-- Last 5 plans: 01-01, 02-01, 03-01, 05-01, 5.1-01, 5.1-02 (complete)
+- Last 5 plans: 01-01, 02-01, 03-01, 05-01, 5.1-01, 5.1-02, 5.1-03 (complete)
 - Trend: Stable (consistent execution)
 
 ## Accumulated Context
@@ -86,6 +86,10 @@ Recent decisions affecting current work:
 3. **jsdom environment** — Fast DOM testing without browser overhead for unit tests
 4. **Sequential E2E execution** — Single worker prevents hitting DashScope API rate limits during testing
 5. **Test utilities pattern** — DRY principle with centralized mocking, consistent test data, and single source of truth
+6. **120 second E2E timeout** — DashScope API takes 1-2 minutes for image generation, Playwright default 30s is too short
+7. **Playwright route mocking** — Use `page.route()` to intercept API calls and return mock responses for error testing
+8. **Console log capture** — Monitor `console` events to validate AI-optimized logging from Phase 5
+9. **Screenshot on failure** — Automatic screenshots help debug failing tests by showing browser state
 
 ### Deferred Issues
 
@@ -105,15 +109,19 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-08
-Stopped at: Phase 5.1 Plan 2 (Unit/Integration Tests) complete
+Stopped at: Phase 5.1 Plan 3 (E2E UI Tests) complete
 Resume file: None
 
 ## Next Actions
 
-Phase 5.1 Plan 3: Write E2E UI tests with Playwright
-- Test user workflow from prompt input to image generation
-- Test error display and retry button
-- Test loading states and status transitions
-- Verify UI responds correctly to API failures
+Phase 5.1 is complete. All 3 plans executed successfully:
+- Plan 1: Test framework setup (Vitest + Playwright)
+- Plan 2: Unit/integration tests (37 passing tests)
+- Plan 3: E2E UI tests (10+ test scenarios covering happy path, errors, responsive design)
 
-Recommended next step: `/gsd:plan-phase 5.1` or continue manually
+Ready for Phase 6: Polish
+- Loading states during generation (already implemented in UI)
+- Responsive design for mobile/desktop (baseline established, ready for enhancements)
+- Visual polish and accessibility improvements
+
+Recommended next step: `/gsd:plan-phase 6` or continue manually

@@ -15,7 +15,7 @@ None
 - [ ] **Phase 3: Generation UI** - Minimal prompt input and generate interface
 - [ ] **Phase 4: Image Display** - Show and enable download of generated images
 - [x] **Phase 5: Error Handling** - API failures, rate limits, user feedback
-- [ ] **Phase 5.1: Add TDD Testing Including UI Testing with Playwright** - Comprehensive test coverage (INSERTED)
+- [x] **Phase 5.1: Add TDD Testing Including UI Testing with Playwright** - Comprehensive test coverage (INSERTED)
 - [ ] **Phase 6: Polish** - Loading states, responsiveness, refinements
 - [ ] **Phase 7: Deployment** - Deploy to China-compatible hosting
 
@@ -91,9 +91,9 @@ Plans:
 Plans:
 - [x] 5.1-01: Test framework setup
 - [x] 5.1-02: Write unit/integration tests
-- [ ] 5.1-03: Write E2E UI tests (TBD)
+- [x] 5.1-03: Write E2E UI tests
 
-**Status**: In Progress - Plan 2 complete (37 passing tests for error parsing, retry logic, and hook state)
+**Status**: Complete - All 3 plans executed successfully (50+ tests total: 37 unit/integration + 10+ E2E scenarios)
 
 ### Phase 6: Polish
 **Goal**: Add loading states, responsiveness, and UX refinements
@@ -130,6 +130,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 3. Generation UI | 1/3 | In Progress | 03-01 |
 | 4. Image Display | 0/3 | Not started | - |
 | 5. Error Handling | 3/3 | Complete | 05-01 |
-| 5.1. Testing (INSERTED) | 2/3 | In Progress | 5.1-01, 5.1-02 |
+| 5.1. Testing (INSERTED) | 3/3 | Complete | 5.1-01, 5.1-02, 5.1-03 |
 | 6. Polish | 0/3 | Not started | - |
 | 7. Deployment | 0/3 | Not started | - |
