@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { PromptInput } from './components/ui/PromptInput';
 import { GenerateButton } from './components/ui/GenerateButton';
 import { useImageGeneration } from './hooks/useImageGeneration';
+import type { ParsedError } from '@/lib/errors';
 
 function App() {
   const [prompt, setPrompt] = useState('');
@@ -13,6 +14,23 @@ function App() {
     const isDark = localStorage.getItem('darkMode') === 'true';
     setDarkMode(isDark);
   }, []);
+
+  // Log errors when displayed to user for debugging and AI analysis
+  useEffect(() => {
+    if (error) {
+      console.warn('[UI Error Displayed]', {
+        timestamp: new Date().toISOString(),
+        errorCode: error.code,
+        userMessage: error.userMessage,
+        technicalMessage: error.technicalMessage,
+        suggestion: error.suggestion,
+        isRetryable: error.isRetryable,
+        currentStatus: status,
+        willShowRetryButton: error.isRetryable && status === 'failed',
+        action: 'showing error message to user in UI'
+      });
+    }
+  }, [error, status]);
 
   const toggleDarkMode = () => {
     const newMode = !darkMode;
@@ -72,8 +90,31 @@ function App() {
           {/* Error display */}
           {error && (
             <div className="mt-4 p-4 rounded-lg bg-destructive/10 border border-destructive text-destructive">
-              <p className="font-semibold">Error:</p>
-              <p className="text-sm">{error}</p>
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold">Error: {error.userMessage}</p>
+                  {error.suggestion && (
+                    <p className="text-sm mt-1 opacity-90">💡 {error.suggestion}</p>
+                  )}
+                  {error.isRetryable && status === 'failed' && (
+                    <button
+                      onClick={() => {
+                        if (prompt.trim()) {
+                          generate(prompt, { size: '1328*1328' });
+                        }
+                      }}
+                      className="mt-2 px-3 py-1 text-sm rounded bg-destructive text-destructive-foreground hover:opacity-90"
+                    >
+                      Try Again
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
           )}
 
