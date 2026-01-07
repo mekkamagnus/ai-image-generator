@@ -83,6 +83,13 @@ Recent decisions affecting current work:
 
 None yet.
 
+### Roadmap Evolution
+
+- Phase 5.1 inserted after Phase 5: "Add TDD Testing Including UI Testing with Playwright" (INSERTED)
+  - Rationale: Comprehensive test coverage needed before deployment
+  - Includes: Vitest for unit/integration tests, Playwright for E2E UI testing
+  - Impact: Phase 6 now depends on Phase 5.1 instead of Phase 5
+
 ### Blockers/Concerns
 
 None yet.

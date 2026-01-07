@@ -15,6 +15,7 @@ None
 - [ ] **Phase 3: Generation UI** - Minimal prompt input and generate interface
 - [ ] **Phase 4: Image Display** - Show and enable download of generated images
 - [x] **Phase 5: Error Handling** - API failures, rate limits, user feedback
+- [ ] **Phase 5.1: Add TDD Testing Including UI Testing with Playwright** - Comprehensive test coverage (INSERTED)
 - [ ] **Phase 6: Polish** - Loading states, responsiveness, refinements
 - [ ] **Phase 7: Deployment** - Deploy to China-compatible hosting
 
@@ -79,9 +80,23 @@ Plans:
 
 **Status**: Complete - All error handling implemented with retry logic, user-friendly messages, and AI-optimized logging
 
+### Phase 5.1: Add TDD Testing Including UI Testing with Playwright (INSERTED)
+
+**Goal**: Implement comprehensive TDD testing with Vitest for unit/integration tests and Playwright for E2E UI testing
+**Depends on**: Phase 5
+**Research**: Likely (test framework selection, testing patterns)
+**Research topics**: Vitest configuration, Playwright setup, testing best practices for React apps, mock patterns for API testing
+**Plans**: 0 plans
+
+Plans:
+- [ ] TBD (run `/gsd:plan-phase 5.1` to break down)
+
+**Details:**
+[To be added during planning]
+
 ### Phase 6: Polish
 **Goal**: Add loading states, responsiveness, and UX refinements
-**Depends on**: Phase 5
+**Depends on**: Phase 5.1
 **Research**: Unlikely (internal UI refinements)
 **Plans**: TBD
 
@@ -114,5 +129,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 3. Generation UI | 1/3 | In Progress | 03-01 |
 | 4. Image Display | 0/3 | Not started | - |
 | 5. Error Handling | 3/3 | Complete | 05-01 |
+| 5.1. Testing (INSERTED) | 0/0 | Not started | - |
 | 6. Polish | 0/3 | Not started | - |
 | 7. Deployment | 0/3 | Not started | - |
