@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-07)
 
 **Core value:** Simple workflow above all else. The path from "idea" to "generated image" must be fast, intuitive, and require minimal clicks or cognitive load.
-**Current focus:** Phase 2 — Qwen Integration
+**Current focus:** Phase 4 — Image Display
 
 ## Current Position
 
-Phase: 2 of 7 (Qwen Integration)
-Plan: 1 of 3 (API Integration)
-Status: Phase 2 Plan 1 complete, ready for Plan 2
-Last activity: 2026-01-08 — Phase 2 Plan 1 (Qwen Integration) executed successfully
+Phase: 4 of 7 (Image Display)
+Plan: Not started
+Status: Phase 3 Plan 1 complete, ready for Phase 4
+Last activity: 2026-01-08 — Phase 3 Plan 1 (Generation UI) executed successfully
 
-Progress: ███░░░░░░ 2/21 plans complete (10%)
+Progress: █████░░░░ 3/21 plans complete (14%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
+- Total plans completed: 3
 - Average duration: ~1 session
-- Total execution time: ~2 hours
+- Total execution time: ~3 hours
 
 **By Phase:**
 
@@ -29,14 +29,14 @@ Progress: ███░░░░░░ 2/21 plans complete (10%)
 |-------|-------|-------|----------|
 | 1. Foundation | 1 | 1 | 1 session |
 | 2. Qwen Integration | 1 | 1 | 1 session |
-| 3. Generation UI | 0 | — | — |
+| 3. Generation UI | 1 | 1 | 1 session |
 | 4. Image Display | 0 | — | — |
 | 5. Error Handling | 0 | — | — |
 | 6. Polish | 0 | — | — |
 | 7. Deployment | 0 | — | — |
 
 **Recent Trend:**
-- Last 5 plans: 01-01, 02-01 (complete)
+- Last 5 plans: 01-01, 02-01, 03-01 (complete)
 - Trend: Stable (consistent execution)
 
 ## Accumulated Context
@@ -63,6 +63,14 @@ Recent decisions affecting current work:
 7. **TypeScript-first API client** — Proper interfaces for GenerateImageOptions, GenerateImageResponse, TaskResult
 8. **React hook polling pattern** — State management with useRef for taskId to avoid stale closures
 
+**From Phase 3 (Generation UI):**
+1. **Textarea over text input** — Better UX for descriptive prompts (100-500 characters)
+2. **Status-based button text** — Clear feedback during 1-2 minute generation process
+3. **Download button** — DashScope URLs expire in 24h, users need to save images
+4. **Error display inline** — Shows API failures immediately without breaking flow
+5. **Start over button** — Cleans state for new generation, resets form
+6. **Controlled component pattern** — Prompt state managed in parent App.tsx for hook integration
+
 ### Deferred Issues
 
 None yet.
@@ -74,15 +82,15 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-08
-Stopped at: Phase 2 Plan 1 (Qwen Integration) complete
+Stopped at: Phase 3 Plan 1 (Generation UI) complete
 Resume file: None
 
 ## Next Actions
 
-Phase 2 Plan 2: Image generation request implementation
-- Create prompt input UI component
-- Integrate generateImage() API call
-- Add loading states during task submission
-- Handle async task submission flow
+Phase 4 Plan 1: Enhanced image display and viewing
+- Implement image gallery for multiple generations
+- Add full-screen/lightbox view
+- Improve download functionality
+- Add image metadata display (prompt, size, generation time)
 
-Recommended next step: `/gsd:plan-phase 2.2` or continue with Plan 2 manually
+Recommended next step: `/gsd:plan-phase 4.1` or continue with Phase 4 manually
