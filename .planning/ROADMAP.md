@@ -1,0 +1,116 @@
+# Roadmap: AI Image Generator
+
+## Overview
+
+Build a minimal text-to-image web app using Qwen models, optimized for simplicity and regional compatibility in China. Start with project foundation, integrate Qwen API, create streamlined UI for prompt-to-image workflow, handle errors gracefully, and deploy to China-compatible hosting.
+
+## Domain Expertise
+
+None
+
+## Phases
+
+- [ ] **Phase 1: Foundation** - Project setup and basic web structure
+- [ ] **Phase 2: Qwen Integration** - Connect to Qwen image generation API
+- [ ] **Phase 3: Generation UI** - Minimal prompt input and generate interface
+- [ ] **Phase 4: Image Display** - Show and enable download of generated images
+- [ ] **Phase 5: Error Handling** - API failures, rate limits, user feedback
+- [ ] **Phase 6: Polish** - Loading states, responsiveness, refinements
+- [ ] **Phase 7: Deployment** - Deploy to China-compatible hosting
+
+## Phase Details
+
+### Phase 1: Foundation
+**Goal**: Set up project structure, build tooling, and basic web framework
+**Depends on**: Nothing (first phase)
+**Research**: Unlikely (standard web project setup with established patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 01-01: Project structure and build setup
+- [ ] 01-02: Basic HTML page and entry point
+- [ ] 01-03: Development server and hot reload
+
+### Phase 2: Qwen Integration
+**Goal**: Connect to Qwen image generation API and handle authentication
+**Depends on**: Phase 1
+**Research**: Likely (external API integration)
+**Research topics**: Current Qwen image API endpoints, authentication methods, request/response format, rate limits, China-specific access patterns
+**Plans**: TBD
+
+Plans:
+- [ ] 02-01: API client setup and authentication
+- [ ] 02-02: Image generation request implementation
+- [ ] 02-03: Response parsing and error detection
+
+### Phase 3: Generation UI
+**Goal**: Create minimal interface for prompt input and triggering generation
+**Depends on**: Phase 2
+**Research**: Unlikely (standard form/input UI patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 03-01: Prompt input field and styling
+- [ ] 03-02: Generate button with click handling
+- [ ] 03-03: API call integration with UI
+
+### Phase 4: Image Display
+**Goal**: Display generated images and enable download
+**Depends on**: Phase 3
+**Research**: Unlikely (standard image display patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 04-01: Image display area with responsive sizing
+- [ ] 04-02: Download button functionality
+- [ ] 04-03: Image state management
+
+### Phase 5: Error Handling
+**Goal**: Handle API failures, rate limits, and provide user feedback
+**Depends on**: Phase 4
+**Research**: Likely (API-specific error patterns)
+**Research topics**: Qwen API error codes and messages, timeout handling, retry strategies, rate limit detection
+**Plans**: TBD
+
+Plans:
+- [ ] 05-01: Error message display in UI
+- [ ] 05-02: API error code handling
+- [ ] 05-03: Timeout and retry logic
+
+### Phase 6: Polish
+**Goal**: Add loading states, responsiveness, and UX refinements
+**Depends on**: Phase 5
+**Research**: Unlikely (internal UI refinements)
+**Plans**: TBD
+
+Plans:
+- [ ] 06-01: Loading states during generation
+- [ ] 06-02: Responsive design for mobile/desktop
+- [ ] 06-03: Visual polish and accessibility improvements
+
+### Phase 7: Deployment
+**Goal**: Deploy to China-compatible hosting and verify access
+**Depends on**: Phase 6
+**Research**: Likely (China-specific deployment)
+**Research topics**: Hosting options accessible from China, deployment configuration, network considerations
+**Plans**: TBD
+
+Plans:
+- [ ] 07-01: Production build configuration
+- [ ] 07-02: Deployment to hosting platform
+- [ ] 07-03: China access verification
+
+## Progress
+
+**Execution Order:**
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
+
+| Phase | Plans Complete | Status | Completed |
+|-------|----------------|--------|-----------|
+| 1. Foundation | 0/3 | Not started | - |
+| 2. Qwen Integration | 0/3 | Not started | - |
+| 3. Generation UI | 0/3 | Not started | - |
+| 4. Image Display | 0/3 | Not started | - |
+| 5. Error Handling | 0/3 | Not started | - |
+| 6. Polish | 0/3 | Not started | - |
+| 7. Deployment | 0/3 | Not started | - |
