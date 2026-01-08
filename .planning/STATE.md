@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-07)
 
 **Core value:** Simple workflow above all else. The path from "idea" to "generated image" must be fast, intuitive, and require minimal clicks or cognitive load.
-**Current focus:** Phase 5.1 — TDD Testing
+**Current focus:** Phase 7 — Deployment
 
 ## Current Position
 
-Phase: 5.1 of 7 (TDD Testing Including UI Testing with Playwright)
-Plan: 3 of 3 in current phase
+Phase: 6 of 8 (Polish)
+Plan: 1 of 1 in current phase
 Status: Phase complete
-Last activity: 2026-01-08 — Phase 5.1 Plan 3 (E2E UI Tests) executed successfully
+Last activity: 2026-01-08 — Phase 6 Plan 1 (Polish) executed successfully
 
-Progress: ████████░░░ 7/24 plans complete (29%)
+Progress: █████████░░ 8/24 plans complete (33%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
+- Total plans completed: 8
 - Average duration: ~1 session
-- Total execution time: ~5.5 hours
+- Total execution time: ~6 hours
 
 **By Phase:**
 
@@ -33,11 +33,12 @@ Progress: ████████░░░ 7/24 plans complete (29%)
 | 4. Image Display | 0 | — | — |
 | 5. Error Handling | 1 | 1 | 12 min |
 | 5.1. Testing | 3 | 3 | 15 min |
-| 6. Polish | 0 | — | — |
+| 6. Polish | 1 | 1 | 1 session |
 | 7. Deployment | 0 | — | — |
+| 8. China Access | 0 | — | — |
 
 **Recent Trend:**
-- Last 5 plans: 01-01, 02-01, 03-01, 05-01, 5.1-01, 5.1-02, 5.1-03 (complete)
+- Last 5 plans: 02-01, 03-01, 05-01, 5.1-01, 5.1-02, 5.1-03, 06-01 (complete)
 - Trend: Stable (consistent execution)
 
 ## Accumulated Context
@@ -91,6 +92,16 @@ Recent decisions affecting current work:
 8. **Console log capture** — Monitor `console` events to validate AI-optimized logging from Phase 5
 9. **Screenshot on failure** — Automatic screenshots help debug failing tests by showing browser state
 
+**From Phase 6 (Polish):**
+1. **Progress bar over spinner** — Visual timeline better communicates 1-2 minute wait than simple spinner
+2. **44px minimum touch targets** — WCAG AA requirement for mobile accessibility, ensures all buttons are tappable
+3. **Stacked mobile buttons** — Vertical stacking on small screens (375px) provides better spacing than cramped side-by-side layout
+4. **focus-visible over focus** — Distinguishes keyboard from mouse navigation, better UX by not showing focus ring for mouse clicks
+5. **Safe area support** — CSS `env(safe-area-inset-*)` prevents content from being hidden by mobile browser UI (notches, home indicators)
+6. **Keyboard shortcuts** — Enter to generate, Escape to clear follow standard form patterns for power users
+7. **Smooth transitions and hover effects** — `transition-all duration-200`, `hover:scale-[1.02]`, `active:scale-[0.98]` for polished feel
+8. **ARIA live regions** — `role="status"` and `role="alert"` with `aria-live="polite"` for screen reader announcements
+
 ### Deferred Issues
 
 None yet.
@@ -109,19 +120,27 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-08
-Stopped at: Phase 5.1 Plan 3 (E2E UI Tests) complete
+Stopped at: Phase 6 Plan 1 (Polish) complete
 Resume file: None
 
 ## Next Actions
 
-Phase 5.1 is complete. All 3 plans executed successfully:
-- Plan 1: Test framework setup (Vitest + Playwright)
-- Plan 2: Unit/integration tests (37 passing tests)
-- Plan 3: E2E UI tests (10+ test scenarios covering happy path, errors, responsive design)
+Phase 6 is complete. Enhanced UI with:
+- Animated progress bar with timeline showing generation steps (⏳ Creating task → 🔄 Processing → ✅ Fetching result)
+- Dynamic time estimate countdown (~120s → ~60s → ~1 minute)
+- Mobile-optimized layout with 44px minimum touch targets (WCAG AA)
+- Stacked buttons on mobile (flex-col sm:flex-row)
+- WCAG AA accessibility: focus-visible rings, ARIA labels, keyboard navigation (Enter/Escape)
+- Smooth transitions and hover effects for polished feel
+- All 19 E2E tests passing with no regressions
 
-Ready for Phase 6: Polish
-- Loading states during generation (already implemented in UI)
-- Responsive design for mobile/desktop (baseline established, ready for enhancements)
-- Visual polish and accessibility improvements
+Ready for Phase 7: Deployment
+- Production build configuration (Vite already configured)
+- Choose deployment platform (Vercel, Netlify, or static hosting)
+- Configure production environment variables
+- Set up custom domain (if applicable)
+- Test deployment from China network
+- Verify API access from deployed environment
 
-Recommended next step: `/gsd:plan-phase 6` or continue manually
+Recommended next step: `/gsd:plan-phase 7` or continue manually
+
