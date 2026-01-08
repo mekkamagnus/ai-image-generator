@@ -31,7 +31,7 @@ export function GenerateButton({ status, onGenerate, hasPrompt }: GenerateButton
     <button
       onClick={onGenerate}
       disabled={isDisabled}
-      className="w-full max-w-2xl mx-auto mt-4 px-6 py-3 rounded-lg bg-primary text-white font-semibold hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+      className="w-full max-w-2xl mx-auto mt-4 min-h-[44px] px-6 py-3 rounded-lg bg-primary text-white font-semibold hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-primary flex items-center justify-center gap-2"
     >
       {status === 'processing' && (
         <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

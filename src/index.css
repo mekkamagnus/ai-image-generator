@@ -11,3 +11,11 @@
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* Safe area support for mobile browsers */
+@supports (padding: env(safe-area-inset-top)) {
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
