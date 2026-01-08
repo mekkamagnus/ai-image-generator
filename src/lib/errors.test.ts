@@ -1,6 +1,6 @@
 // src/lib/errors.test.ts
-import { describe, it, expect, vi } from 'vitest'
-import { ErrorCode, parseAPIError, parseNetworkError, type ParsedError } from './errors'
+import { describe, it, expect, vi, afterEach } from 'vitest'
+import { ErrorCode, parseAPIError, parseNetworkError } from './errors'
 
 describe('ErrorCode', () => {
   it('has all expected error codes', () => {
@@ -19,7 +19,7 @@ describe('ErrorCode', () => {
 })
 
 describe('parseAPIError', () => {
-  const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+  vi.spyOn(console, 'error').mockImplementation(() => {})
 
   afterEach(() => {
     vi.clearAllMocks()
@@ -294,7 +294,7 @@ describe('parseAPIError', () => {
 
       parseAPIError(errorText, 401)
 
-      const logCall = console.error.mock.calls[0]
+      const logCall = (console.error as any).mock.calls[0]
       const loggedData = logCall[1]
       expect(loggedData.timestamp).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/)
     })
@@ -320,7 +320,7 @@ describe('parseAPIError', () => {
 })
 
 describe('parseNetworkError', () => {
-  const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+  vi.spyOn(console, 'error').mockImplementation(() => {})
 
   afterEach(() => {
     vi.clearAllMocks()
@@ -460,7 +460,7 @@ describe('parseNetworkError', () => {
 
       parseNetworkError(error)
 
-      const logCall = console.error.mock.calls[0]
+      const logCall = (console.error as any).mock.calls[0]
       const loggedData = logCall[1]
       expect(loggedData.timestamp).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/)
     })

@@ -14,7 +14,6 @@ export function useImageGeneration() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [taskId, setTaskId] = useState<string | null>(null);
   const [error, setError] = useState<ParsedError | null>(null);
-  const [retryCount, setRetryCount] = useState(0);
   const pollIntervalRef = useRef<number | null>(null);
   const taskIdRef = useRef<string | null>(null);
 
@@ -82,13 +81,29 @@ export function useImageGeneration() {
       setImageUrl(null);
       setTaskId(null);
       setError(null);
-      setRetryCount(0);
 
       // Step 1: Create task with retry logic
       const response = await retryWithBackoff(async () => {
         return await generateImage(prompt, options);
       });
 
+      // Check if response is synchronous (contains image directly)
+      if ('imageUrl' in response) {
+        setImageUrl(response.imageUrl);
+        setStatus('succeeded');
+        setError(null);
+
+        console.log('[Image Generation]', {
+          timestamp: new Date().toISOString(),
+          phase: 'task_succeeded',
+          mode: 'synchronous',
+          imageUrl: response.imageUrl,
+          action: 'image generation completed synchronously'
+        });
+        return;
+      }
+
+      // Otherwise, handle async task polling
       const currentTaskId = response.output.task_id;
       taskIdRef.current = currentTaskId;
       setTaskId(currentTaskId);
@@ -226,7 +241,6 @@ export function useImageGeneration() {
     setImageUrl(null);
     setTaskId(null);
     setError(null);
-    setRetryCount(0);
   }, [clearPoll]);
 
   return { generate, status, imageUrl, taskId, error, cleanup };

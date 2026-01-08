@@ -1,9 +1,8 @@
 // src/hooks/useImageGeneration.test.tsx
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { renderHook, act, waitFor } from '@testing-library/react'
+import { renderHook, act } from '@testing-library/react'
 import { useImageGeneration } from './useImageGeneration'
 import * as qwenApi from '@/lib/qwen-api'
-import { ErrorCode } from '@/lib/errors'
 
 // Mock the API functions
 vi.mock('@/lib/qwen-api', () => ({
