@@ -9,17 +9,17 @@ See: .planning/PROJECT.md (updated 2026-01-07)
 
 ## Current Position
 
-Phase: 6 of 8 (Polish)
-Plan: 1 of 1 in current phase
-Status: Phase complete
-Last activity: 2026-01-08 — Phase 6 Plan 1 (Polish) executed successfully
+Phase: 7 of 8 (Deployment)
+Plan: 1 of 3 in current phase
+Status: In progress
+Last activity: 2026-01-08 — Completed 07-01 (Production Build Configuration)
 
-Progress: █████████░░ 8/24 plans complete (33%)
+Progress: █████████░░ 9/24 plans complete (38%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
+- Total plans completed: 9
 - Average duration: ~1 session
 - Total execution time: ~6 hours
 
@@ -34,11 +34,11 @@ Progress: █████████░░ 8/24 plans complete (33%)
 | 5. Error Handling | 1 | 1 | 12 min |
 | 5.1. Testing | 3 | 3 | 15 min |
 | 6. Polish | 1 | 1 | 1 session |
-| 7. Deployment | 0 | — | — |
+| 7. Deployment | 1 | 3 | 8 min |
 | 8. China Access | 0 | — | — |
 
 **Recent Trend:**
-- Last 5 plans: 02-01, 03-01, 05-01, 5.1-01, 5.1-02, 5.1-03, 06-01 (complete)
+- Last 5 plans: 5.1-02, 5.1-03, 06-01, 07-01 (complete)
 - Trend: Stable (consistent execution)
 
 ## Accumulated Context
@@ -102,6 +102,14 @@ Recent decisions affecting current work:
 7. **Smooth transitions and hover effects** — `transition-all duration-200`, `hover:scale-[1.02]`, `active:scale-[0.98]` for polished feel
 8. **ARIA live regions** — `role="status"` and `role="alert"` with `aria-live="polite"` for screen reader announcements
 
+**From Phase 7 (Deployment):**
+1. **nginx-only deployment** — Lightweight server (30-50MB RAM) vs Node.js backend (200-300MB), essential for 961MB RAM constraint
+2. **Build locally, deploy static files** — Build on Raspberry Pi, upload dist/ to server via rsync
+3. **Environment-based API endpoint selection** — `getApiBaseUrl()` helper switches between dev proxy (`/api/qwen`) and prod direct calls (DashScope API)
+4. **Manual chunk splitting for caching** — Separate `vendor` (React) and `pocketbase` chunks for better long-term caching
+5. **Security-first .gitignore** — Created before first deployment commit to prevent API key exposure
+6. **CORS acknowledgment in code** — Production API calls documented to fail without nginx proxy (added in 07-02)
+
 ### Deferred Issues
 
 None yet.
@@ -120,27 +128,27 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-08
-Stopped at: Phase 6 Plan 1 (Polish) complete
+Stopped at: Completed 07-01 (Production Build Configuration)
 Resume file: None
 
 ## Next Actions
 
-Phase 6 is complete. Enhanced UI with:
-- Animated progress bar with timeline showing generation steps (⏳ Creating task → 🔄 Processing → ✅ Fetching result)
-- Dynamic time estimate countdown (~120s → ~60s → ~1 minute)
-- Mobile-optimized layout with 44px minimum touch targets (WCAG AA)
-- Stacked buttons on mobile (flex-col sm:flex-row)
-- WCAG AA accessibility: focus-visible rings, ARIA labels, keyboard navigation (Enter/Escape)
-- Smooth transitions and hover effects for polished feel
-- All 19 E2E tests passing with no regressions
+Phase 7 Plan 1 complete! Production build configured with:
+- Comprehensive .gitignore securing sensitive files (.env, node_modules/, dist/)
+- .env.example with documented environment variables
+- Clean TypeScript build with manual chunk splitting (vendor, pocketbase)
+- Production API call logic with environment-based endpoint selection
+- Documented CORS limitation requiring nginx proxy (to be added in 07-02)
 
-Ready for Phase 7: Deployment
-- Production build configuration (Vite already configured)
-- Choose deployment platform (Vercel, Netlify, or static hosting)
-- Configure production environment variables
-- Set up custom domain (if applicable)
-- Test deployment from China network
-- Verify API access from deployed environment
+**Next: Plan 07-02** - Deploy to nginx server
+- Build production bundle locally (`npm run build`)
+- Install nginx on mekaelturner server
+- Configure nginx to serve static React files
+- Configure nginx reverse proxy for `/api/qwen/` to DashScope API
+- Add DashScope API key to nginx config
+- Configure DNS for `image-generator.mekaelturner.com`
+- Set up SSL certificate with Let's Encrypt
+- Verify deployment works end-to-end
 
-Recommended next step: `/gsd:plan-phase 7` or continue manually
+Recommended next step: `/gsd:execute-plan .planning/phases/07-deployment/07-02-PLAN.md`
 
