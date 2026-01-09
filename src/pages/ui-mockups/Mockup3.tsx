@@ -114,9 +114,10 @@ export default function Mockup3() {
           </div>
         </div>
 
-        {/* Right Panel - Preview */}
+        {/* Right Panel - Preview & Gallery */}
         <div className="flex-1">
-          <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20 h-full">
+          <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20 h-full flex flex-col">
+            {/* Preview Area */}
             <div className="aspect-square bg-gradient-to-br from-white/20 to-white/5 rounded-2xl flex items-center justify-center mb-6">
               <div className="text-center">
                 <div className="text-6xl mb-4">🖼️</div>
@@ -126,21 +127,43 @@ export default function Mockup3() {
               </div>
             </div>
 
-            {/* Example Grid */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Inspiration</h3>
-              <div className="grid grid-cols-3 gap-3">
+            {/* Gallery Section - Larger, more prominent */}
+            <div className="flex-1">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold">Recent Creations</h3>
+                <button className="text-sm text-white/60 hover:text-white transition-colors">
+                  View All →
+                </button>
+              </div>
+
+              {/* Larger Gallery Grid - 2x3 layout */}
+              <div className="grid grid-cols-2 gap-3">
                 {[1, 2, 3, 4, 5, 6].map((i) => (
                   <div
                     key={i}
-                    className="aspect-square bg-white/10 backdrop-blur-sm rounded-xl hover:scale-105 transition-transform cursor-pointer border border-white/10"
+                    className="aspect-square bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-sm rounded-xl hover:scale-105 transition-all cursor-pointer border border-white/10 group relative overflow-hidden"
                   >
                     <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-2xl">{['🌸', '🏔️', '🌊', '🎭', '🌆', '🚀'][i - 1]}</span>
+                      <div className="text-center">
+                        <span className="text-3xl mb-2 block">{['🌸', '🏔️', '🌊', '🎭', '🌆', '🚀'][i - 1]}</span>
+                        <p className="text-xs text-white/40">Creation {i}</p>
+                      </div>
+                    </div>
+                    {/* Hover overlay */}
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <div className="text-center">
+                        <p className="text-sm font-medium mb-1">View Details</p>
+                        <p className="text-xs text-white/60">Click to expand</p>
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
+
+              {/* Load More Button */}
+              <button className="w-full mt-4 py-3 bg-white/10 backdrop-blur-sm rounded-xl text-sm font-medium hover:bg-white/20 transition-colors border border-white/10">
+                Load More Creations
+              </button>
             </div>
           </div>
         </div>
