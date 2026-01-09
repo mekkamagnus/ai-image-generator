@@ -12,7 +12,7 @@ test.describe('Example E2E Tests', () => {
     const textarea = page.locator('textarea')
     await expect(textarea).toBeVisible()
 
-    const button = page.locator('button:has-text("Generate")')
+    const button = page.locator('button:has-text("Generate Image")')
     await expect(button).toBeVisible()
   })
 
@@ -20,7 +20,7 @@ test.describe('Example E2E Tests', () => {
     await page.goto('/')
 
     // Verify button is disabled when textarea is empty
-    const button = page.locator('button:has-text("Generate")')
+    const button = page.locator('button:has-text("Generate Image")')
     await expect(button).toBeDisabled()
 
     // Verify textarea is visible

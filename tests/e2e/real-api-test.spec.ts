@@ -7,9 +7,13 @@ import { test, expect } from '@playwright/test';
  * Requires valid API key in .env file.
  *
  * WARNING: This will consume API quota and take 1-2 minutes.
+ *
+ * Note: Skipped in CI environment since it requires actual API credentials
  */
 
 test.describe('Real API Image Generation', () => {
+  test.skip(({ mode }) => mode === 'worker' ? false : process.env.CI === 'true', 'Skipping real API test in CI environment');
+
   test('should generate an actual image with real API', async ({ page }) => {
     // Collect console logs for debugging
     const consoleLogs: string[] = [];

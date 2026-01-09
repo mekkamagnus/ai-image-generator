@@ -129,8 +129,8 @@ test.describe('Responsive Design', () => {
       await expect(page.locator('h1:has-text("AI Image Generator")')).toBeVisible();
 
       // Verify single column layout (main content is centered)
-      // Use more specific selector to avoid strict mode violations with multiple .max-w-2xl elements
-      const mainContent = page.locator('.max-w-2xl.mx-auto');
+      // Use .first() to handle multiple .max-w-2xl.mx-auto elements (div, form, button)
+      const mainContent = page.locator('.max-w-2xl.mx-auto').first();
       await expect(mainContent).toBeVisible();
 
       // Verify textarea is full width (with margins)
