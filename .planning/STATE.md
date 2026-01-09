@@ -161,7 +161,6 @@ Resume file: None
 
 **Remaining work:**
 - Phase 4: Image Display (not started, but basic display already works)
-- Phase 8: China Access (if needed for China-specific deployment)
 
-**Note:** The application is fully functional and deployed to production. Phases 4 and 8 were planned but may not be necessary depending on requirements.
+**Note:** The application is fully functional and deployed to production. Phase 4 was planned but may not be necessary depending on requirements.
 
