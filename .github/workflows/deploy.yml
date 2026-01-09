@@ -1,0 +1,73 @@
+name: Deploy to Production
+
+# Trigger on push to main branch only
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+
+    # Required GitHub secrets (configure at: https://github.com/mekkamagnus/ai-image-generator/settings/secrets/actions)
+    # - SSH_PRIVATE_KEY: Private SSH key for deployment (generate with: ssh-keygen -t rsa -b 4096 -C "github-actions" -f ~/.ssh/github_actions_deploy)
+    # - SSH_HOST: 137.184.143.235
+    # - SSH_USER: root
+    # - DASHSCOPE_API_KEY: DashScope API key for nginx config
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Run unit tests
+        run: npm run test:run
+
+      - name: Build production bundle
+        run: npm run build
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to production
+        run: |
+          # Deploy static files
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/deploy_key" \
+            dist/ \
+            root@${{ secrets.SSH_HOST }}:/var/www/image-generator/
+
+      - name: Configure API key
+        run: |
+          # Update DashScope API key in nginx config
+          ssh -i ~/.ssh/deploy_key root@${{ secrets.SSH_HOST }} \
+            "sed -i 's|YOUR_DASHSCOPE_API_KEY|${{ secrets.DASHSCOPE_API_KEY }}|g' \
+             /etc/nginx/sites-available/image-generator && \
+             nginx -t && systemctl reload nginx"
+
+      - name: Verify deployment
+        run: |
+          sleep 5  # Wait for nginx to reload
+          curl -f https://image-generator.mekaelturner.com || exit 1
+
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          echo "Deployment failed. Workflow marked as failed for investigation."
+          echo "Manual rollback may be required if server was partially updated."
