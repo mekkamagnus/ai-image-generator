@@ -26,5 +26,9 @@ export default defineConfig({
     url: 'http://localhost:5173',
     timeout: 120 * 1000,
     reuseExistingServer: !process.env.CI,
+    // Set dummy API key for Vite proxy (tests use mocked responses anyway)
+    env: {
+      DASHSCOPE_API_KEY: 'sk-test-key-for-playwright-mocking-only'
+    },
   },
 })
