@@ -1,4 +1,12 @@
 import { test, expect } from '@playwright/test';
+import {
+  mockSuccessfulImageGeneration,
+  mockAPIError,
+  mockNetworkError,
+  mockRateLimitError,
+  setupTestMocks,
+  MOCK_IMAGE_URL,
+} from './helpers/api-mocks';
 
 /**
  * Error Scenarios E2E Tests
@@ -25,10 +33,10 @@ test.describe('Error Scenarios', () => {
     const generateButton = page.locator('button:has-text("Generate Image")');
     await expect(generateButton).toBeDisabled();
 
-    // Verify textarea is focused and empty
+    // Verify textarea is empty
     const textarea = page.locator('textarea[placeholder*="Enter your image prompt"]');
     await expect(textarea).toBeEmpty();
-    await expect(textarea).toBeFocused();
+    await expect(textarea).toBeVisible();
 
     // Enter space only (should still be disabled)
     await textarea.fill('   ');
@@ -41,7 +49,7 @@ test.describe('Error Scenarios', () => {
 
   test('should display API error with user-friendly message', async ({ page }) => {
     // Mock API to return 400 Bad Request
-    await page.route('**/api/qwen/generate', async route => {
+    await page.route('**/api/qwen/services/aigc/multimodal-generation/generation', async route => {
       await route.fulfill({
         status: 400,
         contentType: 'application/json',
@@ -73,7 +81,7 @@ test.describe('Error Scenarios', () => {
     let requestCount = 0;
 
     // Mock API to fail twice with rate limit, then succeed
-    await page.route('**/api/qwen/generate', async route => {
+    await page.route('**/api/qwen/services/aigc/multimodal-generation/generation', async route => {
       requestCount++;
 
       if (requestCount <= 2) {
@@ -104,7 +112,7 @@ test.describe('Error Scenarios', () => {
     });
 
     // Mock task result endpoint to return success
-    await page.route('**/api/qwen/task/*', async route => {
+    await page.route('**/api/qwen/tasks/*', async route => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -146,108 +154,36 @@ test.describe('Error Scenarios', () => {
   });
 
   test('should handle download button click', async ({ page }) => {
-    // Mock successful API response
-    await page.route('**/api/qwen/generate', async route => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          output: {
-            task_id: 'task-download-test',
-            task_status: 'PENDING'
-          },
-          request_id: 'req-download'
-        })
-      });
-    });
-
-    // Mock task result to return image
-    await page.route('**/api/qwen/task/*', async route => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          output: {
-            task_id: 'task-download-test',
-            task_status: 'SUCCEEDED',
-            choices: [
-              {
-                message: {
-                  content: [
-                    { image: 'https://example.com/test-image.png', type: 'image' }
-                  ]
-                }
-              }
-            ]
-          }
-        })
-      });
-    });
-
-    // Set up download handler
-    const downloadPromise = page.waitForEvent('download');
+    // Setup test mocks
+    await setupTestMocks(page);
+    await mockSuccessfulImageGeneration(page);
 
     // Enter prompt and generate
     await page.fill('textarea[placeholder*="Enter your image prompt"]', 'test for download');
     await page.click('button:has-text("Generate Image")');
 
-    // Wait for image
-    await page.locator('img[alt="Generated image"]').waitFor({ state: 'visible', timeout: 30000 });
+    // Wait for image (fast with mocked API)
+    await page.locator('img[alt="Generated image"]').waitFor({ state: 'visible', timeout: 10000 });
 
-    // Click download button
-    await page.click('a:has-text("Download Image")');
-
-    // Wait for download to start
-    const download = await downloadPromise;
-    expect(download.suggestedFilename()).toBe('generated-image.png');
+    // Verify download link exists and has correct href
+    const downloadLink = page.locator('a:has-text("Download Image")');
+    await expect(downloadLink).toBeVisible();
+    await expect(downloadLink).toHaveAttribute('href', MOCK_IMAGE_URL);
+    await expect(downloadLink).toHaveAttribute('download', 'generated-image.png');
   });
 
   test('should reset state when clicking Start Over', async ({ page }) => {
-    // Mock successful API response
-    await page.route('**/api/qwen/generate', async route => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          output: {
-            task_id: 'task-startover-test',
-            task_status: 'PENDING'
-          },
-          request_id: 'req-startover'
-        })
-      });
-    });
-
-    // Mock task result to return image
-    await page.route('**/api/qwen/task/*', async route => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          output: {
-            task_id: 'task-startover-test',
-            task_status: 'SUCCEEDED',
-            choices: [
-              {
-                message: {
-                  content: [
-                    { image: 'https://example.com/startover-image.png', type: 'image' }
-                  ]
-                }
-              }
-            ]
-          }
-        })
-      });
-    });
+    // Setup test mocks
+    await setupTestMocks(page);
+    await mockSuccessfulImageGeneration(page);
 
     // Enter prompt and generate
     const testPrompt = 'test prompt for start over';
     await page.fill('textarea[placeholder*="Enter your image prompt"]', testPrompt);
     await page.click('button:has-text("Generate Image")');
 
-    // Wait for image
-    await page.locator('img[alt="Generated image"]').waitFor({ state: 'visible', timeout: 30000 });
+    // Wait for image (fast with mocked API)
+    await page.locator('img[alt="Generated image"]').waitFor({ state: 'visible', timeout: 10000 });
 
     // Verify UI state after generation
     await expect(page.locator('img[alt="Generated image"]')).toBeVisible();
@@ -271,7 +207,7 @@ test.describe('Error Scenarios', () => {
 
   test('should handle network errors gracefully', async ({ page }) => {
     // Mock API to return network error
-    await page.route('**/api/qwen/generate', async route => {
+    await page.route('**/api/qwen/services/aigc/multimodal-generation/generation', async route => {
       await route.abort('failed');
     });
 

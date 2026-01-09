@@ -19,11 +19,13 @@ test.describe('Example E2E Tests', () => {
   test('shows validation when prompt is empty', async ({ page }) => {
     await page.goto('/')
 
-    // Try to click generate without entering prompt
+    // Verify button is disabled when textarea is empty
     const button = page.locator('button:has-text("Generate")')
-    await button.click()
-
-    // Button should be disabled when textarea is empty
     await expect(button).toBeDisabled()
+
+    // Verify textarea is visible
+    const textarea = page.locator('textarea')
+    await expect(textarea).toBeVisible()
+    await expect(textarea).toHaveValue('')
   })
 })
