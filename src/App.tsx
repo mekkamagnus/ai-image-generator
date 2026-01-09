@@ -1,8 +1,6 @@
 // src/App.tsx
 import { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { PromptInput } from './components/ui/PromptInput';
-import { GenerateButton } from './components/ui/GenerateButton';
 import { useImageGeneration } from './hooks/useImageGeneration';
 import Mockup1 from './pages/ui-mockups/Mockup1';
 import Mockup2 from './pages/ui-mockups/Mockup2';
@@ -127,145 +125,206 @@ function App() {
       <Route path="/ui-mockup/2" element={<Mockup2 />} />
       <Route path="/ui-mockup/3" element={<Mockup3 />} />
 
-      {/* Main App Route */}
+      {/* Main App Route - Using Mockup 3 Design */}
       <Route path="/" element={
-        <div className="min-h-screen bg-background text-foreground transition-colors">
-      <div className="container mx-auto px-4 py-8 sm:py-6 md:py-8">
-        {/* Header with dark mode toggle */}
-        <div className="flex justify-between items-center mb-8">
-          <div className="flex items-center gap-4">
-            <h1 className="text-2xl md:text-3xl font-bold">AI Image Generator</h1>
-            <a
-              href="/ui-mockup/1"
-              className="text-sm px-3 py-1 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors"
-            >
-              View Mockups
-            </a>
+        <div className={`min-h-screen transition-colors ${darkMode ? 'bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white' : 'bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white'}`}>
+          {/* Background Pattern */}
+          <div className="absolute inset-0 opacity-30">
+            <div className="absolute inset-0" style={{
+              backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+              backgroundSize: '40px 40px'
+            }} />
           </div>
-          <button
-            onClick={toggleDarkMode}
-            className="min-h-[44px] px-4 py-2 rounded-lg bg-primary text-white hover:opacity-90 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-primary"
-            aria-label="Toggle dark mode"
-          >
-            {darkMode ? '☀️ Light' : '🌙 Dark'}
-          </button>
-        </div>
 
-        {/* Main content */}
-        <div className="max-w-2xl mx-auto">
-          {/* Prompt input */}
-          <PromptInput
-            value={prompt}
-            onChange={setPrompt}
-            onSubmit={handleGenerate}
-            disabled={status === 'pending' || status === 'processing'}
-          />
-
-          {/* Generate button */}
-          <GenerateButton
-            status={status}
-            onGenerate={handleGenerate}
-            hasPrompt={prompt.trim().length > 0}
-          />
-
-          {/* Error display */}
-          {error && (
-            <div className="mt-4 p-4 rounded-lg bg-destructive/10 border border-destructive text-destructive" role="alert" aria-live="polite">
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0">
-                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
+          {/* Navigation */}
+          <nav className="fixed top-0 left-0 right-0 z-50 bg-white/10 backdrop-blur-xl border-b border-white/20">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center justify-between h-16">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                    <span className="text-xl">🎨</span>
+                  </div>
+                  <span className="text-xl font-bold">
+                    AI Studio
+                  </span>
                 </div>
-                <div className="flex-1">
-                  <p className="font-semibold">Error: {error.userMessage}</p>
-                  {error.suggestion && (
-                    <p className="text-sm mt-1 opacity-90">💡 {error.suggestion}</p>
-                  )}
-                  {error.isRetryable && status === 'failed' && (
-                    <button
-                      onClick={() => {
-                        if (prompt.trim()) {
-                          generate(prompt, { size: '1328*1328' });
-                        }
-                      }}
-                      className="mt-2 min-h-[44px] px-3 py-2 text-sm rounded bg-destructive text-destructive-foreground hover:opacity-90 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-destructive"
-                    >
-                      Try Again
-                    </button>
-                  )}
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={toggleDarkMode}
+                    className="px-3 py-1 text-sm bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition"
+                    aria-label="Toggle dark mode"
+                  >
+                    {darkMode ? '☀️ Light' : '🌙 Dark'}
+                  </button>
+                  <a
+                    href="/ui-mockup/3"
+                    className="text-sm text-white/80 hover:text-white transition-colors"
+                  >
+                    View Mockups
+                  </a>
                 </div>
               </div>
             </div>
-          )}
+          </nav>
 
-          {/* Status indicator */}
-          {status === 'processing' && (
-            <div className="mt-4 text-center text-muted-foreground" role="status" aria-live="polite">
-              <p className="text-base">Generating your image... ({getTimeEstimate()} remaining)</p>
-              {taskId && <p className="text-xs mt-1">Task ID: {taskId}</p>}
+          {/* Main Layout */}
+          <div className="pt-24 pb-8 px-4 flex gap-6">
+            {/* Left Panel - Controls */}
+            <div className="w-96 flex-shrink-0">
+              <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20 sticky top-24">
+                <h2 className="text-2xl font-bold mb-6">Create</h2>
 
-              {/* Progress bar */}
-              <div className="mt-4 mx-auto max-w-md bg-primary/20 h-2 rounded-full overflow-hidden">
-                <div
-                  className="bg-primary h-full rounded-full transition-all duration-1000 ease-in-out"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
+                {/* Prompt Input */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium mb-2">Your Vision</label>
+                  <textarea
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    placeholder="Describe what you want to see..."
+                    className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 resize-none"
+                    rows={5}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && e.ctrlKey && prompt.trim()) {
+                        handleGenerate();
+                      }
+                    }}
+                  />
+                </div>
 
-              {/* Timeline */}
-              <div className="mt-3 flex justify-center items-center gap-4 text-xs">
-                <span className={`flex items-center gap-1 ${progress >= 33 ? 'text-foreground' : 'text-muted-foreground'}`}>
-                  {progress >= 33 ? '✅' : '⏳'} Creating task
-                </span>
-                <span className="text-muted-foreground">→</span>
-                <span className={`flex items-center gap-1 ${progress >= 66 ? 'text-foreground' : 'text-muted-foreground'}`}>
-                  {progress >= 66 ? '✅' : progress >= 33 ? '🔄' : '⏳'} Processing
-                </span>
-                <span className="text-muted-foreground">→</span>
-                <span className={`flex items-center gap-1 ${progress >= 100 ? 'text-foreground' : 'text-muted-foreground'}`}>
-                  {progress >= 100 ? '✅' : progress >= 66 ? '🔄' : '⏳'} Fetching result
-                </span>
-              </div>
-            </div>
-          )}
+                {/* Style Selection */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium mb-3">Style</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { id: 'realistic', name: 'Realistic' },
+                      { id: 'artistic', name: 'Artistic' },
+                      { id: 'abstract', name: 'Abstract' },
+                      { id: 'anime', name: 'Anime' }
+                    ].map((style) => (
+                      <button
+                        key={style.id}
+                        className="p-3 rounded-xl text-sm font-medium bg-white/10 border-2 border-transparent hover:bg-white/20 transition-all"
+                      >
+                        {style.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
-          {/* Image result */}
-          {imageUrl && status === 'succeeded' && (
-            <div className="mt-8">
-              <div className="rounded-lg overflow-hidden border border-border shadow-lg">
-                <img
-                  src={imageUrl}
-                  alt="Generated image"
-                  className="w-full h-auto max-w-full object-contain"
-                />
-              </div>
-              <div className="mt-4 flex flex-col sm:flex-row gap-4 justify-center">
-                <a
-                  href={imageUrl}
-                  download="generated-image.png"
-                  className="min-h-[44px] px-6 py-3 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-secondary inline-flex items-center justify-center"
-                  aria-label="Download generated image"
-                >
-                  Download Image
-                </a>
+                {/* Error Display */}
+                {error && (
+                  <div className="mb-6 p-4 rounded-xl bg-red-500/20 backdrop-blur-sm border border-red-500/30" role="alert" aria-live="polite">
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0">❌</div>
+                      <div className="flex-1">
+                        <p className="font-semibold text-sm">{error.userMessage}</p>
+                        {error.suggestion && (
+                          <p className="text-xs mt-1 opacity-90">💡 {error.suggestion}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Status Indicator */}
+                {status === 'processing' && (
+                  <div className="mb-6 p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20">
+                    <p className="text-sm font-medium mb-2">✨ Creating Magic...</p>
+                    <p className="text-xs text-white/60 mb-3">{getTimeEstimate()} remaining</p>
+                    <div className="w-full bg-white/20 h-2 rounded-full overflow-hidden">
+                      <div
+                        className="bg-white h-full rounded-full transition-all duration-1000 ease-in-out"
+                        style={{ width: `${progress}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Generate Button */}
                 <button
-                  onClick={handleReset}
-                  className="min-h-[44px] px-6 py-3 rounded-lg border border-border hover:bg-muted transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 inline-flex items-center justify-center"
-                  aria-label="Clear and start new generation"
+                  onClick={handleGenerate}
+                  disabled={!prompt.trim() || status === 'pending' || status === 'processing'}
+                  className="w-full py-4 bg-white text-purple-600 rounded-xl font-bold hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg"
                 >
-                  Start Over
+                  {status === 'processing' ? '✨ Creating Magic...' : '✨ Generate Image'}
                 </button>
               </div>
             </div>
-          )}
-        </div>
-      </div>
-      </div>
-    } />
 
-    {/* Catch all - redirect to home */}
-    <Route path="*" element={<Navigate to="/" replace />} />
+            {/* Right Panel - Preview & Gallery */}
+            <div className="flex-1">
+              <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20 h-full flex flex-col">
+                {/* Preview Area */}
+                <div className="aspect-square bg-gradient-to-br from-white/20 to-white/5 rounded-2xl flex items-center justify-center mb-6 overflow-hidden">
+                  {imageUrl && status === 'succeeded' ? (
+                    <img
+                      src={imageUrl}
+                      alt="Generated image"
+                      className="w-full h-full object-contain"
+                    />
+                  ) : (
+                    <div className="text-center">
+                      <div className="text-6xl mb-4">🖼️</div>
+                      <p className="text-white/60">
+                        {prompt ? 'Your creation will appear here' : 'Enter a prompt to get started'}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Image Actions */}
+                {imageUrl && status === 'succeeded' && (
+                  <div className="flex gap-3 mb-6">
+                    <a
+                      href={imageUrl}
+                      download="generated-image.png"
+                      className="flex-1 py-3 bg-white/20 backdrop-blur-sm rounded-xl text-sm font-medium hover:bg-white/30 transition-colors text-center border border-white/10"
+                    >
+                      Download
+                    </a>
+                    <button
+                      onClick={handleReset}
+                      className="flex-1 py-3 bg-white/20 backdrop-blur-sm rounded-xl text-sm font-medium hover:bg-white/30 transition-colors border border-white/10"
+                    >
+                      Start Over
+                    </button>
+                  </div>
+                )}
+
+                {/* Gallery Section */}
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold">Recent Creations</h3>
+                    <button className="text-sm text-white/60 hover:text-white transition-colors">
+                      View All →
+                    </button>
+                  </div>
+
+                  {/* Gallery Grid */}
+                  <div className="grid grid-cols-2 gap-3">
+                    {[1, 2, 3, 4, 5, 6].map((i) => (
+                      <div
+                        key={i}
+                        className="aspect-square bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-sm rounded-xl hover:scale-105 transition-all cursor-pointer border border-white/10 group relative overflow-hidden"
+                      >
+                        <div className="w-full h-full flex items-center justify-center">
+                          <div className="text-center">
+                            <span className="text-3xl mb-2 block">{['🌸', '🏔️', '🌊', '🎭', '🌆', '🚀'][i - 1]}</span>
+                            <p className="text-xs text-white/40">Creation {i}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      } />
+
+      {/* Catch all - redirect to home */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
