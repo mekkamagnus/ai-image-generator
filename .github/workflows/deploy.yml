@@ -14,7 +14,7 @@ jobs:
     # - SSH_PRIVATE_KEY: Private SSH key for deployment (generate with: ssh-keygen -t rsa -b 4096 -C "github-actions" -f ~/.ssh/github_actions_deploy)
     # - SSH_HOST: 137.184.143.235
     # - SSH_USER: root
-    # - DASHSCOPE_API_KEY: DashScope API key for nginx config
+    # Note: DASHSCOPE_API_KEY is already configured in nginx on the server, no need to add as secret
 
     steps:
       - name: Checkout code
@@ -53,13 +53,11 @@ jobs:
             dist/ \
             root@${{ secrets.SSH_HOST }}:/var/www/image-generator/
 
-      - name: Configure API key
+      - name: Reload nginx
         run: |
-          # Update DashScope API key in nginx config
+          # Reload nginx to pick up new static files
           ssh -i ~/.ssh/deploy_key root@${{ secrets.SSH_HOST }} \
-            "sed -i 's|YOUR_DASHSCOPE_API_KEY|${{ secrets.DASHSCOPE_API_KEY }}|g' \
-             /etc/nginx/sites-available/image-generator && \
-             nginx -t && systemctl reload nginx"
+            "nginx -t && systemctl reload nginx"
 
       - name: Verify deployment
         run: |
