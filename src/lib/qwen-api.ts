@@ -15,40 +15,21 @@ export interface GenerateImageResponse {
 }
 
 // Determine API base URL based on environment
-// In production, this will fail without a CORS proxy (serverless function or backend)
-// The deployment phase (07-02) should add a server-side proxy to handle this
+// In production, nginx proxy handles API calls to avoid CORS issues
 const getApiBaseUrl = () => {
-  if (import.meta.env.PROD) {
-    // Production: Direct API call (will fail due to CORS without proxy)
-    // DEPLOYMENT NOTE: This requires a CORS proxy solution:
-    // - Vercel/Netlify serverless function
-    // - Backend API proxy (e.g., PocketBase)
-    // - CORS proxy service (temporary workaround)
-    return 'https://dashscope.aliyuncs.com/api/v1';
-  } else {
-    // Development: Use Vite proxy (configured in vite.config.ts)
-    return '/api/qwen';
-  }
+  // Both dev and prod use /api/qwen - nginx proxies to DashScope API in production
+  return '/api/qwen';
 };
-
-const API_KEY = import.meta.env.VITE_DASHSCOPE_API_KEY || import.meta.env.DASHSCOPE_API_KEY;
 
 export async function generateImage(
   prompt: string,
   options: GenerateImageOptions = {}
 ): Promise<GenerateImageResponse | { imageUrl: string }> {
   const apiBaseUrl = getApiBaseUrl();
-  const isProduction = import.meta.env.PROD;
 
   const headers: Record<string, string> = {
     'Content-Type': 'application/json'
   };
-
-  // In production, we need to include Authorization header directly
-  // (In dev, Vite proxy adds it automatically)
-  if (isProduction && API_KEY) {
-    headers['Authorization'] = `Bearer ${API_KEY}`;
-  }
 
   const response = await fetch(`${apiBaseUrl}/services/aigc/multimodal-generation/generation`, {
     method: 'POST',
@@ -108,12 +89,8 @@ export interface TaskResult {
 
 export async function getTaskResult(taskId: string): Promise<TaskResult> {
   const apiBaseUrl = getApiBaseUrl();
-  const isProduction = import.meta.env.PROD;
 
   const headers: Record<string, string> = {};
-  if (isProduction && API_KEY) {
-    headers['Authorization'] = `Bearer ${API_KEY}`;
-  }
 
   const response = await fetch(`${apiBaseUrl}/tasks/${taskId}`, {
     method: 'GET',
