@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-07)
 ## Current Position
 
 Phase: 7 of 8 (Deployment)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-01-08 — Completed 07-01 (Production Build Configuration)
+Last activity: 2026-01-09 — Completed 07-02 (Deploy to nginx Server)
 
-Progress: █████████░░ 9/24 plans complete (38%)
+Progress: ██████████░ 10/24 plans complete (42%)
 
 ## Performance Metrics
 
@@ -34,11 +34,11 @@ Progress: █████████░░ 9/24 plans complete (38%)
 | 5. Error Handling | 1 | 1 | 12 min |
 | 5.1. Testing | 3 | 3 | 15 min |
 | 6. Polish | 1 | 1 | 1 session |
-| 7. Deployment | 1 | 3 | 8 min |
+| 7. Deployment | 2 | 3 | 8 min, 47 min |
 | 8. China Access | 0 | — | — |
 
 **Recent Trend:**
-- Last 5 plans: 5.1-02, 5.1-03, 06-01, 07-01 (complete)
+- Last 5 plans: 5.1-02, 5.1-03, 06-01, 07-01, 07-02 (complete)
 - Trend: Stable (consistent execution)
 
 ## Accumulated Context
@@ -105,10 +105,12 @@ Recent decisions affecting current work:
 **From Phase 7 (Deployment):**
 1. **nginx-only deployment** — Lightweight server (30-50MB RAM) vs Node.js backend (200-300MB), essential for 961MB RAM constraint
 2. **Build locally, deploy static files** — Build on Raspberry Pi, upload dist/ to server via rsync
-3. **Environment-based API endpoint selection** — `getApiBaseUrl()` helper switches between dev proxy (`/api/qwen`) and prod direct calls (DashScope API)
-4. **Manual chunk splitting for caching** — Separate `vendor` (React) and `pocketbase` chunks for better long-term caching
-5. **Security-first .gitignore** — Created before first deployment commit to prevent API key exposure
-6. **CORS acknowledgment in code** — Production API calls documented to fail without nginx proxy (added in 07-02)
+3. **nginx reverse proxy for API calls** — Both dev and production use `/api/qwen`, nginx proxies to DashScope API server-side with authentication
+4. **Server-side API authentication** — DashScope API key stored in nginx config (server-side proxy adds `Authorization` header automatically)
+5. **Manual chunk splitting for caching** — Separate `vendor` (React) and `pocketbase` chunks for better long-term caching
+6. **Security-first .gitignore** — Created before first deployment commit to prevent API key exposure
+7. **Let's Encrypt SSL with certbot** — Free SSL certificates with automatic nginx configuration and auto-renewal via systemd timer
+8. **DigitalOcean DNS management via CLI** — Used doctl for automated DNS A record creation (image-generator → 137.184.143.235)
 
 ### Deferred Issues
 
@@ -121,34 +123,37 @@ None yet.
   - Includes: Vitest for unit/integration tests, Playwright for E2E UI testing
   - Impact: Phase 6 now depends on Phase 5.1 instead of Phase 5
 
+- Phase 7.1 inserted after Phase 7: "Add CI/CD Integration for Automated Deployment" (INSERTED)
+  - Rationale: Automate deployment workflow - local → GitHub → production (image-generator.mekaelturner.com)
+  - Includes: GitHub Actions workflow, automated testing integration, environment variable management
+  - Impact: Streamlines deployment process after Phase 7 completion
+
 ### Blockers/Concerns
 
 None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-08
-Stopped at: Completed 07-01 (Production Build Configuration)
+Last session: 2026-01-09
+Stopped at: Completed 07-02 (Deploy to nginx Server)
 Resume file: None
 
 ## Next Actions
 
-Phase 7 Plan 1 complete! Production build configured with:
-- Comprehensive .gitignore securing sensitive files (.env, node_modules/, dist/)
-- .env.example with documented environment variables
-- Clean TypeScript build with manual chunk splitting (vendor, pocketbase)
-- Production API call logic with environment-based endpoint selection
-- Documented CORS limitation requiring nginx proxy (to be added in 07-02)
+Phase 7 Plan 2 complete! Application deployed to production at https://image-generator.mekaelturner.com with:
+- nginx 1.24.0 serving static files (2.3M RAM usage)
+- nginx reverse proxy handling DashScope API calls server-side
+- SSL certificate from Let's Encrypt (valid until 2026-04-09, auto-renewal enabled)
+- DNS configured via DigitalOcean (image-generator → 137.184.143.235)
+- Image generation working end-to-end (user verified "it's working")
+- Fixed production API calls to use nginx proxy instead of direct DashScope API
 
-**Next: Plan 07-02** - Deploy to nginx server
-- Build production bundle locally (`npm run build`)
-- Install nginx on mekaelturner server
-- Configure nginx to serve static React files
-- Configure nginx reverse proxy for `/api/qwen/` to DashScope API
-- Add DashScope API key to nginx config
-- Configure DNS for `image-generator.mekaelturner.com`
-- Set up SSL certificate with Let's Encrypt
-- Verify deployment works end-to-end
+**Next: Plan 07-03** - China Access Verification
+- Test application accessibility from China network
+- Verify DashScope API connectivity from China region
+- Test image generation performance from China
+- Document any regional issues or optimizations needed
+- Confirm deployment works for target audience
 
-Recommended next step: `/gsd:execute-plan .planning/phases/07-deployment/07-02-PLAN.md`
+Recommended next step: `/gsd:execute-plan .planning/phases/07-deployment/07-03-PLAN.md`
 

@@ -18,6 +18,7 @@ None
 - [x] **Phase 5.1: Add TDD Testing Including UI Testing with Playwright** - Comprehensive test coverage (INSERTED)
 - [x] **Phase 6: Polish** - Loading states, responsiveness, refinements
 - [ ] **Phase 7: Deployment** - Deploy to China-compatible hosting
+- [ ] **Phase 7.1: Add CI/CD Integration for Automated Deployment** - CI/CD pipeline (INSERTED)
 
 ## Phase Details
 
@@ -115,13 +116,27 @@ Plans:
 
 Plans:
 - [x] 07-01: Production build configuration
-- [ ] 07-02: Deployment to hosting platform
+- [x] 07-02: Deployment to hosting platform
 - [ ] 07-03: China access verification
+
+### Phase 7.1: Add CI/CD Integration for Automated Deployment (INSERTED)
+
+**Goal**: Implement automated CI/CD pipeline for streamlined deployment workflow
+**Depends on**: Phase 7
+**Research**: Likely (CI/CD platform selection, workflow automation)
+**Research topics**: GitHub Actions, deployment automation, environment variable management, automated testing integration
+**Plans**: TBD
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 7.1 to break down)
+
+**Details:**
+Workflow: local development → GitHub push → automated deployment to production (image-generator.mekaelturner.com)
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 5.1 → 6 → 7
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 5.1 → 6 → 7 → 7.1
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -132,4 +147,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 5.1 → 6 → 7
 | 5. Error Handling | 3/3 | Complete | 05-01 |
 | 5.1. Testing (INSERTED) | 3/3 | Complete | 5.1-01, 5.1-02, 5.1-03 |
 | 6. Polish | 1/1 | Complete | 06-01 |
-| 7. Deployment | 1/3 | In Progress | 07-01 |
+| 7. Deployment | 2/3 | In Progress | 07-01, 07-02 |
+| 7.1. CI/CD (INSERTED) | 0/0 | Not started | - |
