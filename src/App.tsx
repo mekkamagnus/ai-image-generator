@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useImageGeneration } from './hooks/useImageGeneration';
+import type { ImageStyle } from './lib/qwen-api';
 import Mockup1 from './pages/ui-mockups/Mockup1';
 import Mockup2 from './pages/ui-mockups/Mockup2';
 import Mockup3 from './pages/ui-mockups/Mockup3';
@@ -9,17 +10,63 @@ import Mockup3 from './pages/ui-mockups/Mockup3';
 // Keyboard shortcuts
 const ESCAPE_KEY = 'Escape';
 
+// Recent creation type
+interface RecentCreation {
+  id: string;
+  imageUrl: string;
+  prompt: string;
+  style: ImageStyle;
+  timestamp: number;
+}
+
 function App() {
   const [prompt, setPrompt] = useState('');
   const [darkMode, setDarkMode] = useState(false);
   const [progress, setProgress] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [selectedStyle, setSelectedStyle] = useState<ImageStyle>('realistic');
+  const [recentCreations, setRecentCreations] = useState<RecentCreation[]>([]);
   const { generate, status, imageUrl, taskId, error, cleanup } = useImageGeneration();
 
   useEffect(() => {
     const isDark = localStorage.getItem('darkMode') === 'true';
     setDarkMode(isDark);
   }, []);
+
+  // Load recent creations from localStorage on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('recentCreations');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setRecentCreations(parsed);
+      }
+    } catch (error) {
+      console.error('Failed to load recent creations:', error);
+    }
+  }, []);
+
+  // Save to localStorage when image generation succeeds
+  useEffect(() => {
+    if (imageUrl && status === 'succeeded' && prompt) {
+      const newCreation: RecentCreation = {
+        id: Date.now().toString(),
+        imageUrl,
+        prompt,
+        style: selectedStyle,
+        timestamp: Date.now()
+      };
+
+      const updated = [newCreation, ...recentCreations].slice(0, 12); // Keep only 12 most recent
+      setRecentCreations(updated);
+
+      try {
+        localStorage.setItem('recentCreations', JSON.stringify(updated));
+      } catch (error) {
+        console.error('Failed to save recent creations:', error);
+      }
+    }
+  }, [imageUrl, status, prompt, selectedStyle, recentCreations]);
 
   // Progress and timer for loading state
   useEffect(() => {
@@ -99,7 +146,7 @@ function App() {
 
   const handleGenerate = () => {
     if (prompt.trim()) {
-      generate(prompt, { size: '1328*1328' });
+      generate(prompt, { size: '1328*1328', style: selectedStyle });
     }
   };
 
@@ -108,6 +155,10 @@ function App() {
     cleanup();
     setProgress(0);
     setElapsedTime(0);
+  };
+
+  const handleStyleSelect = (style: ImageStyle) => {
+    setSelectedStyle(style);
   };
 
   const getTimeEstimate = () => {
@@ -196,14 +247,19 @@ function App() {
                   <label className="block text-sm font-medium mb-3">Style</label>
                   <div className="grid grid-cols-2 gap-2">
                     {[
-                      { id: 'realistic', name: 'Realistic' },
-                      { id: 'artistic', name: 'Artistic' },
-                      { id: 'abstract', name: 'Abstract' },
-                      { id: 'anime', name: 'Anime' }
+                      { id: 'realistic' as const, name: 'Realistic' },
+                      { id: 'artistic' as const, name: 'Artistic' },
+                      { id: 'abstract' as const, name: 'Abstract' },
+                      { id: 'anime' as const, name: 'Anime' }
                     ].map((style) => (
                       <button
                         key={style.id}
-                        className="p-3 rounded-xl text-sm font-medium bg-white/10 border-2 border-transparent hover:bg-white/20 transition-all"
+                        onClick={() => handleStyleSelect(style.id)}
+                        className={`p-3 rounded-xl text-sm font-medium transition-all ${
+                          selectedStyle === style.id
+                            ? 'bg-white/30 border-2 border-white'
+                            : 'bg-white/10 border-2 border-transparent hover:bg-white/20'
+                        }`}
                       >
                         {style.name}
                       </button>
@@ -295,27 +351,56 @@ function App() {
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold">Recent Creations</h3>
-                    <button className="text-sm text-white/60 hover:text-white transition-colors">
-                      View All →
-                    </button>
+                    {recentCreations.length > 0 && (
+                      <button className="text-sm text-white/60 hover:text-white transition-colors">
+                        Clear All
+                      </button>
+                    )}
                   </div>
 
                   {/* Gallery Grid */}
-                  <div className="grid grid-cols-2 gap-3">
-                    {[1, 2, 3, 4, 5, 6].map((i) => (
-                      <div
-                        key={i}
-                        className="aspect-square bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-sm rounded-xl hover:scale-105 transition-all cursor-pointer border border-white/10 group relative overflow-hidden"
-                      >
-                        <div className="w-full h-full flex items-center justify-center">
-                          <div className="text-center">
-                            <span className="text-3xl mb-2 block">{['🌸', '🏔️', '🌊', '🎭', '🌆', '🚀'][i - 1]}</span>
-                            <p className="text-xs text-white/40">Creation {i}</p>
+                  {recentCreations.length > 0 ? (
+                    <div className="grid grid-cols-2 gap-3">
+                      {recentCreations.map((creation) => (
+                        <div
+                          key={creation.id}
+                          onClick={() => {
+                            setPrompt(creation.prompt);
+                            setSelectedStyle(creation.style);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          className="aspect-square bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-sm rounded-xl hover:scale-105 transition-all cursor-pointer border border-white/10 group relative overflow-hidden"
+                        >
+                          <img
+                            src={creation.imageUrl}
+                            alt={creation.prompt}
+                            className="w-full h-full object-cover"
+                          />
+                          {/* Hover overlay */}
+                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-2">
+                            <div className="text-center">
+                              <p className="text-xs font-medium mb-1 line-clamp-2">{creation.prompt}</p>
+                              <p className="text-xs text-white/60 capitalize">{creation.style}</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 gap-3">
+                      {[1, 2, 3, 4, 5, 6].map((i) => (
+                        <div
+                          key={i}
+                          className="aspect-square bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-sm rounded-xl border border-white/10 flex items-center justify-center"
+                        >
+                          <div className="text-center">
+                            <span className="text-3xl mb-2 block">{['🌸', '🏔️', '🌊', '🎭', '🌆', '🚀'][i - 1]}</span>
+                            <p className="text-xs text-white/40">No creations yet</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

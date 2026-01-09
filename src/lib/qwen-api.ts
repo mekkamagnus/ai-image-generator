@@ -1,9 +1,12 @@
 // src/lib/qwen-api.ts
 
+export type ImageStyle = 'realistic' | 'artistic' | 'abstract' | 'anime';
+
 export interface GenerateImageOptions {
   size?: '1024*1024' | '1328*1328' | '1920*1080';
   promptExtend?: boolean;
   watermark?: boolean;
+  style?: ImageStyle;
 }
 
 export interface GenerateImageResponse {
@@ -27,6 +30,18 @@ export async function generateImage(
 ): Promise<GenerateImageResponse | { imageUrl: string }> {
   const apiBaseUrl = getApiBaseUrl();
 
+  // Add style prefix to prompt
+  let enhancedPrompt = prompt;
+  if (options.style) {
+    const stylePrefixes: Record<ImageStyle, string> = {
+      realistic: 'A photorealistic image of',
+      artistic: 'An artistic painting of',
+      abstract: 'An abstract artwork representing',
+      anime: 'An anime-style illustration of'
+    };
+    enhancedPrompt = `${stylePrefixes[options.style]} ${prompt}`;
+  }
+
   const headers: Record<string, string> = {
     'Content-Type': 'application/json'
   };
@@ -39,7 +54,7 @@ export async function generateImage(
       input: {
         messages: [{
           role: 'user',
-          content: [{ text: prompt }]
+          content: [{ text: enhancedPrompt }]
         }]
       },
       parameters: {
