@@ -1,8 +1,12 @@
 // src/App.tsx
 import { useState, useEffect } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { PromptInput } from './components/ui/PromptInput';
 import { GenerateButton } from './components/ui/GenerateButton';
 import { useImageGeneration } from './hooks/useImageGeneration';
+import Mockup1 from './pages/ui-mockups/Mockup1';
+import Mockup2 from './pages/ui-mockups/Mockup2';
+import Mockup3 from './pages/ui-mockups/Mockup3';
 
 // Keyboard shortcuts
 const ESCAPE_KEY = 'Escape';
@@ -117,11 +121,27 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground transition-colors">
+    <Routes>
+      {/* UI Mockup Routes */}
+      <Route path="/ui-mockup/1" element={<Mockup1 />} />
+      <Route path="/ui-mockup/2" element={<Mockup2 />} />
+      <Route path="/ui-mockup/3" element={<Mockup3 />} />
+
+      {/* Main App Route */}
+      <Route path="/" element={
+        <div className="min-h-screen bg-background text-foreground transition-colors">
       <div className="container mx-auto px-4 py-8 sm:py-6 md:py-8">
         {/* Header with dark mode toggle */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold">AI Image Generator</h1>
+          <div className="flex items-center gap-4">
+            <h1 className="text-2xl md:text-3xl font-bold">AI Image Generator</h1>
+            <a
+              href="/ui-mockup/1"
+              className="text-sm px-3 py-1 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors"
+            >
+              View Mockups
+            </a>
+          </div>
           <button
             onClick={toggleDarkMode}
             className="min-h-[44px] px-4 py-2 rounded-lg bg-primary text-white hover:opacity-90 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-primary"
@@ -241,7 +261,12 @@ function App() {
           )}
         </div>
       </div>
-    </div>
+      </div>
+    } />
+
+    {/* Catch all - redirect to home */}
+    <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 

@@ -17,7 +17,8 @@
   "dependencies": {
     "pocketbase": "^0.26.5",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.12.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
