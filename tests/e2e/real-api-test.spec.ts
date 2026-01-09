@@ -11,10 +11,10 @@ import { test, expect } from '@playwright/test';
  * Note: Skipped in CI environment since it requires actual API credentials
  */
 
-test.describe('Real API Image Generation', () => {
-  test.skip(({ mode }) => mode === 'worker' ? false : process.env.CI === 'true', 'Skipping real API test in CI environment');
+const testReal = process.env.CI === 'true' ? test.skip : test;
 
-  test('should generate an actual image with real API', async ({ page }) => {
+test.describe('Real API Image Generation', () => {
+  testReal('should generate an actual image with real API', async ({ page }) => {
     // Collect console logs for debugging
     const consoleLogs: string[] = [];
     page.on('console', msg => {
@@ -72,7 +72,7 @@ test.describe('Real API Image Generation', () => {
     }
   });
 
-  test('should show user-friendly error if API key is invalid', async ({ page }) => {
+  testReal('should show user-friendly error if API key is invalid', async ({ page }) => {
     // This test verifies error handling works even if API key is invalid
     await page.goto('/');
 
